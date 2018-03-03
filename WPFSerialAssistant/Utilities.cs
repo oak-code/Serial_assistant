@@ -2,13 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 //using System.Threading.Tasks;
 
 namespace WPFSerialAssistant
 {
     public static class Utilities
     {
+
+        /// <summary>
+        /// 以带时间戳的字符发送接收信息
+        /// </summary>
         public static string BytesToText(List<byte> bytesBuffer, ReceiveMode mode, Encoding encoding)
+        {
+            string result = "";
+            string timeDateString = "";
+            DateTime now = DateTime.Now;
+            
+                timeDateString = string.Format("[{0}:{1}:{2}]",
+                now.Hour.ToString("00"),
+                now.Minute.ToString("00"),
+                now.Second.ToString("00"));
+                result += encoding.GetString(bytesBuffer.ToArray<byte>());
+                if (result[result.Length-1] == '\n')
+                {
+                    result= result.Substring(0, result.Length - 1);
+                  
+                }
+            result = result.Replace("\n", "\n" + timeDateString);
+            result = timeDateString+result + '\n';
+                    
+
+            return result;
+        }
+        /// <summary>
+        /// 以配置模式显示接收数据
+        /// </summary>
+        public static string BytesToHex(List<byte> bytesBuffer, ReceiveMode mode, Encoding encoding)
         {
             string result = "";
 
@@ -16,7 +46,6 @@ namespace WPFSerialAssistant
             {
                 return encoding.GetString(bytesBuffer.ToArray<byte>());
             }
-
             foreach (var item in bytesBuffer)
             {
                 switch (mode)
@@ -40,7 +69,9 @@ namespace WPFSerialAssistant
 
             return result;
         }
-
+        /// <summary>
+        /// 发送字符处理
+        /// </summary>
         public static string ToSpecifiedText(string text, SendMode mode, Encoding encoding)
         {
             string result = "";

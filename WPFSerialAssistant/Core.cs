@@ -19,8 +19,8 @@ namespace WPFSerialAssistant
             LoadConfig();
 
             // 其他模块初始化
-            InitClockTimer();
-            InitAutoSendDataTimer();
+            InitClockTimer();//定时期初始化
+            InitAutoSendDataTimer();// 用于自动发送串口数据的定时器
             InitSerialPort();
 
             // 查找可以使用的端口号
@@ -78,14 +78,7 @@ namespace WPFSerialAssistant
 
         #endregion
 
-        private void RecvDataBoxAppend(string textData)
-        {
-            if (showRecvDataCheckBox.IsChecked == true)
-            {
-                this.recvDataRichTextBox.AppendText(textData);
-                this.recvDataRichTextBox.ScrollToEnd();
-            }
-        }
+     
 
         private bool SendData()
         {
@@ -211,7 +204,7 @@ namespace WPFSerialAssistant
 
             // 保存接收模式
             config.Add("receiveMode", receiveMode);
-            config.Add("showReceiveData", showReceiveData);
+           
 
             // 保存发送模式
             config.Add("sendMode", sendMode);
@@ -347,8 +340,7 @@ namespace WPFSerialAssistant
                     break;
             }
 
-            showReceiveData = config.GetBool("showReceiveData");
-            showRecvDataCheckBox.IsChecked = showReceiveData;
+       
 
             // 加载发送模式
             sendMode = (SendMode)config.GetInt("sendMode");

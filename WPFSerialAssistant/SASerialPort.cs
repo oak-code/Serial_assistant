@@ -23,7 +23,7 @@ namespace WPFSerialAssistant
 
         private void InitSerialPort()
         {
-            serialPort.DataReceived += SerialPort_DataReceived;
+            serialPort.DataReceived += SerialPort_DataReceived;//串口接收到数据调用SerialPort_DataReceived
             InitCheckTimer();
         }
 
@@ -247,9 +247,10 @@ namespace WPFSerialAssistant
         /// <summary>
         /// 超时时间为50ms
         /// </summary>
-        private const int TIMEOUT = 50;
+        private const int TIMEOUT = 10;
         private void InitCheckTimer()
         {
+          
             // 如果缓冲区中有数据，并且定时时间达到前依然没有得到处理，将会自动触发处理函数。
             checkTimer.Interval = new TimeSpan(0, 0, 0, 0, TIMEOUT);
             checkTimer.IsEnabled = false;

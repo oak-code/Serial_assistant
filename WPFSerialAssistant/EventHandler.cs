@@ -14,7 +14,8 @@ namespace WPFSerialAssistant
         Hex,        //十六进制
         Decimal,    //十进制
         Octal,      //八进制
-        Binary      //二进制
+        Binary,      //二进制
+
     }
 
     public enum SendMode
@@ -245,16 +246,20 @@ namespace WPFSerialAssistant
                         receiveMode = ReceiveMode.Binary;
                         Information("提示：二进制显示模式。");
                         break;
+                 
                     default:
                         break;
                 }
             }
         }
-
-        private bool showReceiveData = true;
+   
+        private bool timeStamp =false;
+        /// <summary>
+        /// 显示时间戳
+        /// </summary>
         private void showRecvDataCheckBox_Click(object sender, RoutedEventArgs e)
         {
-            showReceiveData = (bool)showRecvDataCheckBox.IsChecked;
+            timeStamp = (bool)showRecvDataCheckBox.IsChecked;
         }
 
         private void sendDataModeRadioButton_Click(object sender, RoutedEventArgs e)
@@ -434,7 +439,7 @@ namespace WPFSerialAssistant
                 // 将缓冲区所有字节读取出来
                 sp.Read(tempBuffer, 0, bytesToRead);
 
-                // 检查是否需要清空全局缓冲区先
+                // 检查是否需要清空全局缓冲区
                 if (shouldClear)
                 {
                     receiveBuffer.Clear();
@@ -472,20 +477,30 @@ namespace WPFSerialAssistant
         #endregion
 
         #region 数据处理
-
+        private int OldReceiveBufferLen = 0;
+        private int ReceivedDataOutTime;
         private void CheckTimer_Tick(object sender, EventArgs e)
         {
             // 触发了就把定时器关掉，防止重复触发。
             StopCheckTimer();
-
-            // 只有没有到达阈值的情况下才会强制其启动新的线程处理缓冲区数据。
-            if (receiveBuffer.Count < THRESH_VALUE)
+            if (OldReceiveBufferLen == receiveBuffer.Count)
+            {
+                ReceivedDataOutTime++;
+            }
+            else {
+                ReceivedDataOutTime = 0;
+                OldReceiveBufferLen = receiveBuffer.Count;
+            }
+           
+          
+            //超过50ms没有收到数据认为本次接收完成，对接收数据进行处理
+            if (ReceivedDataOutTime >= 5)
             {
                 //recvDataRichTextBox.AppendText("Timeout!\n");
                 // 进行数据处理，采用新的线程进行处理。
                 Thread dataHandler = new Thread(new ParameterizedThreadStart(ReceivedDataHandler));
                 dataHandler.Start(receiveBuffer);
-            }          
+            }
         }
 
 
@@ -504,13 +519,19 @@ namespace WPFSerialAssistant
 
             this.Dispatcher.Invoke(new Action(() =>
             {
-                if (showReceiveData)
+                if (timeStamp)
                 {
                     // 根据显示模式显示接收到的字节.
                     recvDataRichTextBox.AppendText(Utilities.BytesToText(recvBuffer, receiveMode, serialPort.Encoding));
                     recvDataRichTextBox.ScrollToEnd();
-                }
 
+                }
+                else {
+                    // 根据显示模式显示接收到的字节.
+                    recvDataRichTextBox.AppendText(Utilities.BytesToHex(recvBuffer, receiveMode, serialPort.Encoding));
+                    recvDataRichTextBox.ScrollToEnd();
+                }
+                
                 dataRecvStatusBarItem.Visibility = Visibility.Collapsed;
             }));
 

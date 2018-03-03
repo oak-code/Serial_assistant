@@ -55,6 +55,12 @@
   <PropertyGroup>
     <ApplicationIcon>1.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>lib\Json\Net45\Newtonsoft.Json.dll</HintPath>
@@ -154,6 +160,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="01.ico" />
+    <Resource Include="002.ico" />
     <Content Include="lib\Json\Net20\Newtonsoft.Json.dll" />
     <Content Include="lib\Json\Net20\Newtonsoft.Json.pdb" />
     <Resource Include="lib\Json\Net20\Newtonsoft.Json.xml" />

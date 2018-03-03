@@ -26,11 +26,11 @@ namespace WPFSerialAssistant
             clockTimer.Start();
         }
 
+        
+        private DispatcherTimer autoSendDataTimer = new DispatcherTimer();
         /// <summary>
         /// 用于自动发送串口数据的定时器
         /// </summary>
-        private DispatcherTimer autoSendDataTimer = new DispatcherTimer();
-
         private void InitAutoSendDataTimer()
         {
             autoSendDataTimer.IsEnabled = false;
