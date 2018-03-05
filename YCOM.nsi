@@ -2,8 +2,8 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "YCOM"
-!define PRODUCT_VERSION "1.1"
-!define PRODUCT_PUBLISHER "OAKCO"
+!define PRODUCT_VERSION "2.0"
+!define PRODUCT_PUBLISHER "Oakco"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\WPFSerialAssistant.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -38,17 +38,15 @@
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "YcomSetup.exe"
+OutFile "YCOM.exe"
 InstallDir "$PROGRAMFILES\YCOM"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
 Section "MainSection" SEC01
-  SetOutPath "$INSTDIR\Config"
-  SetOverwrite try
-  File "WPFSerialAssistant\bin\Debug\Config\default.conf"
   SetOutPath "$INSTDIR"
+  SetOverwrite try
   File "WPFSerialAssistant\bin\Debug\data.txt"
   File "WPFSerialAssistant\bin\Debug\Newtonsoft.Json.dll"
   File "WPFSerialAssistant\bin\Debug\Newtonsoft.Json.xml"
@@ -93,14 +91,12 @@ Section Uninstall
   Delete "$INSTDIR\Newtonsoft.Json.xml"
   Delete "$INSTDIR\Newtonsoft.Json.dll"
   Delete "$INSTDIR\data.txt"
-  Delete "$INSTDIR\Config\default.conf"
 
   Delete "$SMPROGRAMS\YCOM\Uninstall.lnk"
   Delete "$DESKTOP\YCOM.lnk"
   Delete "$SMPROGRAMS\YCOM\YCOM.lnk"
 
   RMDir "$SMPROGRAMS\YCOM"
-  RMDir "$INSTDIR\Config"
   RMDir "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"

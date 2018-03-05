@@ -426,8 +426,8 @@ namespace WPFSerialAssistant
                 }
             }
 
-            // Enter发送数据
-            if (e.Key == Key.Enter)
+            //Alt+ Enter发送数据
+            if (e.Key == Key.Enter && e.KeyboardDevice.IsKeyDown(Key.LeftAlt))
             {
                 SendData();
             }

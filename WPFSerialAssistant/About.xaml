@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFSerialAssistant"
         mc:Ignorable="d" Name="AboutWindow"
-        Title="关于串口助手" Height="200" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="关于YCOM" Height="200" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Icon="1.ico">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,11 +22,11 @@
         </StackPanel>
         <Grid Grid.Row="1">
             <StackPanel Grid.Column="0" Margin="10">
-                <TextBlock>版本编号：Verison 1.3</TextBlock>
-                <TextBlock>更新日期：2016年01月24日 星期日</TextBlock>
-                <TextBlock>软件作者：Christopher Lee</TextBlock>
-                <TextBlock>反馈邮箱：christopherlee1993@outlook.com</TextBlock>
-                <TextBlock>小小说明：开放源码，采用MIT协议。望共同学习进步。</TextBlock>
+                <TextBlock>版本编号：Verison 2.0</TextBlock>
+                <TextBlock>更新日期：2018年03月5日</TextBlock>
+                <TextBlock>软件作者：Oakco</TextBlock>
+                <TextBlock>反馈邮箱：oakcode@outlook.com</TextBlock>
+                <TextBlock>开源说明：开放源码，采用MIT协议。</TextBlock>
             </StackPanel>
         </Grid>
     </Grid>

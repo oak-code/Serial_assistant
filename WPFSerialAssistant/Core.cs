@@ -329,14 +329,7 @@ namespace WPFSerialAssistant
                     recvHexRadioButton.IsChecked = true;
                     break;
                 case ReceiveMode.Decimal:
-                    recvDecRadioButton.IsChecked = true;
-                    break;
-                case ReceiveMode.Octal:
-                    recvOctRadioButton.IsChecked = true;
-                    break;
-                case ReceiveMode.Binary:
-                    recvBinRadioButton.IsChecked = true;
-                    break;
+                  
                 default:
                     break;
             }
