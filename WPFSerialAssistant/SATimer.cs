@@ -26,7 +26,29 @@ namespace WPFSerialAssistant
             clockTimer.Start();
         }
 
-        
+        private DispatcherTimer ComboBoxTimer = new DispatcherTimer();
+        /// <summary>
+        /// 用于检测串口信息的定时器
+        /// </summary>
+        private void InitComboBox_ClickTimer()
+        {
+            ComboBoxTimer.IsEnabled = false;
+            ComboBoxTimer.Tick += ComboBoxTimer_Tick;
+        }
+
+        private void StartComboBoxTimer(int interval)
+        {
+            ComboBoxTimer.IsEnabled = true;
+            ComboBoxTimer.Interval = TimeSpan.FromMilliseconds(interval);
+            ComboBoxTimer.Start();
+        }
+
+        private void StopComboBoxTimer()
+        {
+            ComboBoxTimer.IsEnabled = false;
+            ComboBoxTimer.Stop();
+        }
+
         private DispatcherTimer autoSendDataTimer = new DispatcherTimer();
         /// <summary>
         /// 用于自动发送串口数据的定时器

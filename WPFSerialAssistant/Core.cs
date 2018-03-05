@@ -21,6 +21,7 @@ namespace WPFSerialAssistant
             // 其他模块初始化
             InitClockTimer();//定时期初始化
             InitAutoSendDataTimer();// 用于自动发送串口数据的定时器
+            InitComboBox_ClickTimer();
             InitSerialPort();
 
             // 查找可以使用的端口号

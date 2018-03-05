@@ -165,7 +165,19 @@ namespace WPFSerialAssistant
                 }
             }
         }
+        private void ComboBox_Click(object sender, SelectionChangedEventArgs e)
+        {
 
+            if (serialPort.IsOpen)
+            {
+                ClosePort();
+                openClosePortButton.Content = "打开";
+                StartComboBoxTimer(300);
+                //OpenPort();
+                //openClosePortButton.Content = "关闭";
+            }
+               
+        }
         private void findPortButton_Click(object sender, RoutedEventArgs e)
         {
             FindPorts();
@@ -351,7 +363,23 @@ namespace WPFSerialAssistant
                 StopAutoSendDataTimer();
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBoxTimer_Tick(object sender, EventArgs e)
+        {
+            if (serialPort.IsOpen)
+            {
 
+            }
+            else {
+                OpenPort();
+                openClosePortButton.Content = "关闭";
+            }
+            StopComboBoxTimer();
+        }
         /// <summary>
         /// 窗口关闭前拦截
         /// </summary>
@@ -449,16 +477,16 @@ namespace WPFSerialAssistant
                 // 暂存缓冲区字节到全局缓冲区中等待处理
                 receiveBuffer.AddRange(tempBuffer);
 
-                if (receiveBuffer.Count >= THRESH_VALUE)
-                {
-                    //Dispatcher.Invoke(new Action(() =>
-                    //{
-                    //    recvDataRichTextBox.AppendText("Process data.\n");
-                    //}));
-                    // 进行数据处理，采用新的线程进行处理。
-                    Thread dataHandler = new Thread(new ParameterizedThreadStart(ReceivedDataHandler));
-                    dataHandler.Start(receiveBuffer);
-                }
+                //if (receiveBuffer.Count >= THRESH_VALUE)
+                //{
+                //    //Dispatcher.Invoke(new Action(() =>
+                //    //{
+                //    //    recvDataRichTextBox.AppendText("Process data.\n");
+                //    //}));
+                //    // 进行数据处理，采用新的线程进行处理。
+                //    Thread dataHandler = new Thread(new ParameterizedThreadStart(ReceivedDataHandler));
+                //    dataHandler.Start(receiveBuffer);
+                //}
 
                 // 启动定时器，防止因为一直没有到达缓冲区字节阈值，而导致接收到的数据一直留存在缓冲区中无法处理。
                 StartCheckTimer();
@@ -483,7 +511,7 @@ namespace WPFSerialAssistant
         {
             // 触发了就把定时器关掉，防止重复触发。
             StopCheckTimer();
-            if (OldReceiveBufferLen == receiveBuffer.Count)
+            if ((OldReceiveBufferLen == receiveBuffer.Count)&&(receiveBuffer.Count!=0))
             {
                 ReceivedDataOutTime++;
             }
@@ -493,14 +521,16 @@ namespace WPFSerialAssistant
             }
            
           
-            //超过50ms没有收到数据认为本次接收完成，对接收数据进行处理
-            if (ReceivedDataOutTime >= 5)
+            //超过60ms没有收到数据认为本次接收完成，对接收数据进行处理
+            if (ReceivedDataOutTime >= 6)
             {
+                ReceivedDataOutTime = 0;
                 //recvDataRichTextBox.AppendText("Timeout!\n");
                 // 进行数据处理，采用新的线程进行处理。
                 Thread dataHandler = new Thread(new ParameterizedThreadStart(ReceivedDataHandler));
                 dataHandler.Start(receiveBuffer);
             }
+            StartCheckTimer();//打开定时器
         }
 
 
@@ -524,7 +554,7 @@ namespace WPFSerialAssistant
                     // 根据显示模式显示接收到的字节.
                     recvDataRichTextBox.AppendText(Utilities.BytesToText(recvBuffer, receiveMode, serialPort.Encoding));
                     recvDataRichTextBox.ScrollToEnd();
-
+                  
                 }
                 else {
                     // 根据显示模式显示接收到的字节.
@@ -534,7 +564,7 @@ namespace WPFSerialAssistant
                 
                 dataRecvStatusBarItem.Visibility = Visibility.Collapsed;
             }));
-
+            receiveBuffer.Clear();
             // TO-DO：
             // 处理数据，比如解析指令等等
         }
